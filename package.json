@@ -1,5 +1,5 @@
 {
-  "name": "drawio-mcp",
+  "name": "@drawio/mcp",
   "version": "1.0.0",
   "description": "Official draw.io MCP server for LLMs - Open diagrams in draw.io editor",
   "type": "module",

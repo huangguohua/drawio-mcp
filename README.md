@@ -15,13 +15,13 @@ The official [draw.io](https://www.draw.io) MCP (Model Context Protocol) server 
 ### Using npx (recommended)
 
 ```bash
-npx @anthropic/drawio-mcp
+npx @drawio/mcp
 ```
 
 ### Global installation
 
 ```bash
-npm install -g @anthropic/drawio-mcp
+npm install -g @drawio/mcp
 drawio-mcp
 ```
 
@@ -48,7 +48,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "drawio": {
       "command": "npx",
-      "args": ["@anthropic/drawio-mcp"]
+      "args": ["@drawio/mcp"]
     }
   }
 }
@@ -59,7 +59,7 @@ Add to your Claude Desktop configuration file:
 Configure your MCP client to run the server via stdio:
 
 ```bash
-npx @anthropic/drawio-mcp
+npx @drawio/mcp
 ```
 
 ## Tools
@@ -178,7 +178,7 @@ These prompts explicitly request the draw.io MCP tools:
 
 ### Flowchart with Mermaid
 
-```mermaid
+```text
 graph TD
     A[Start] --> B{Decision}
     B -->|Yes| C[Action 1]
@@ -189,7 +189,7 @@ graph TD
 
 ### Sequence Diagram with Mermaid
 
-```mermaid
+```text
 sequenceDiagram
     participant User
     participant Server
