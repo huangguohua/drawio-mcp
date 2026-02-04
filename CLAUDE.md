@@ -16,13 +16,20 @@ Both approaches support:
 
 ## Project Instructions (No MCP)
 
-The `claude-project-instructions.txt` file contains instructions that can be pasted into a Claude Project's custom instructions. Claude then uses its built-in Python analysis tool to generate compressed draw.io URLs directly.
+The `claude-project-instructions.txt` file contains instructions that can be pasted into a Claude Project's custom instructions. Claude generates an **HTML artifact** that embeds draw.io's lightbox viewer directly.
+
+**How it works:**
+- Loads pako.js from CDN for reliable compression
+- Shows a button to open draw.io in lightbox mode (`lightbox=1&dark=auto&border=10&edit=_blank`)
+- In draw.io, hover to see the "Edit" button to open the full editor
 
 **Advantages over MCP:**
 - No installation required
 - Works in Claude.ai (web) and Claude Desktop
 - No system access needed
-- User can inspect the URL before clicking
+- User clicks button to view diagram in draw.io
+- Edit button in draw.io opens full editor in new tab
+- Reliable compression for large XML diagrams
 
 ## MCP Server Tools
 
@@ -204,7 +211,18 @@ The server generates draw.io URLs using the `#create` hash parameter:
 
 | Error | Cause | Solution |
 |-------|-------|----------|
+| "invalid distance too far back" | Compression error with large XML (Project Instructions) | Use uncompressed format (`compressed: false`) |
 | "URI malformed" | Special characters in CSV style attributes | Use hardcoded colors instead of `%column%` placeholders |
 | "Service nicht verfügbar" | draw.io CSV server unavailable | Retry later or use Mermaid instead |
 | Blank diagram | Invalid Mermaid/XML syntax | Check syntax, ensure proper escaping |
 | Diagram doesn't match expected | Mermaid version differences | Simplify syntax, avoid edge cases |
+
+## Compression Guidelines
+
+**MCP Server:** Uses Node.js with pako - compression works reliably for all diagram types.
+
+**Project Instructions:** Uses an HTML artifact with pako.js loaded from CDN. This approach:
+- Bypasses Claude's Python Analysis Tool (which has zlib issues with large data)
+- Handles compression in JavaScript, which works reliably
+- Supports all diagram types (XML, Mermaid, CSV) with full compression
+- Opens draw.io's lightbox mode with edit capability

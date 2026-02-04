@@ -319,19 +319,19 @@ You can use draw.io diagram generation without installing the MCP server by usin
 
 ### How It Works
 
-Claude uses its built-in Python analysis tool to:
-1. Generate Mermaid/CSV/XML diagram code based on your request
-2. Compress and encode the diagram data
-3. Create a draw.io URL with the embedded diagram
-4. Present the URL as a clickable link
+Claude creates an **HTML artifact** that:
+1. Generates Mermaid/CSV/XML diagram code based on your request
+2. Compresses the diagram data using pako.js (loaded from CDN)
+3. Shows a button to open draw.io with the diagram in lightbox mode
+4. In draw.io, hover to see the "Edit" button to open the full editor
+
+**Note:** The artifact uses draw.io's lightbox mode (`lightbox=1&dark=auto&border=10&edit=_blank`).
 
 ### Example
 
 **You:** Create a flowchart for a user login process
 
-**Claude:** Here's your flowchart:
-
-👉 [Open in draw.io](https://app.diagrams.net/?pv=0&grid=0#create=...)
+**Claude:** *Creates an HTML artifact with an "Open in draw.io" button*
 
 ---
 
