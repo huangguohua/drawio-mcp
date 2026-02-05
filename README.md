@@ -16,17 +16,16 @@ The official [draw.io](https://www.draw.io) MCP (Model Context Protocol) server 
 
 Install and configure the MCP server for Claude Desktop. The server runs locally and can automatically open diagrams in your browser.
 
-### Option 2: Project Instructions (No MCP)
+### Option 2: Project Instructions
 
-Use draw.io diagram generation with custom project instructions - works in both Claude.ai and Claude Desktop without installing the MCP server. See [Using Project Instructions](#using-project-instructions-no-mcp) below.
+Use draw.io diagram generation with custom project instructions - works in both Claude.ai and Claude Desktop without installing the MCP server. See [Using Project Instructions](#using-project-instructions) below.
 
 | Feature | MCP Server | Project Instructions |
 |---------|------------|----------------------|
 | Platform | Claude Desktop | Claude.ai & Claude Desktop |
 | Installation | Required | None |
 | System access | Opens browser automatically | No system access |
-| Link verification | Automatic | User can inspect link before clicking |
-| Complexity | More setup | Just paste instructions |
+| Diagram size | Unlimited | Unlimited (with compression) |
 
 ---
 
@@ -299,7 +298,7 @@ npm start
 
 ---
 
-## Using Project Instructions (No MCP)
+## Using Project Instructions
 
 You can use draw.io diagram generation without installing the MCP server by using custom project instructions. This works in both Claude.ai (web) and Claude Desktop.
 
@@ -309,7 +308,7 @@ You can use draw.io diagram generation without installing the MCP server by usin
 - **Works everywhere** - Claude.ai and Claude Desktop
 - **No system access** - Claude generates a link without accessing your computer
 - **Transparent** - You can inspect the generated URL before clicking
-- **Verifiable** - The link visibly points to `app.diagrams.net`
+- **Unlimited size** - Uses compression for large diagrams (1000+ elements)
 
 ### Setup
 
@@ -319,19 +318,22 @@ You can use draw.io diagram generation without installing the MCP server by usin
 
 ### How It Works
 
-Claude creates an **HTML artifact** that:
+Claude executes simple Python code that:
 1. Generates Mermaid/CSV/XML diagram code based on your request
-2. Compresses the diagram data using pako.js (loaded from CDN)
-3. Shows a button to open draw.io with the diagram in lightbox mode
-4. In draw.io, hover to see the "Edit" button to open the full editor
-
-**Note:** The artifact uses draw.io's lightbox mode (`lightbox=1&dark=auto&border=10&edit=_blank`).
+2. Compresses the data using zlib and encodes as base64
+3. Creates a JSON payload with `compressed: true`
+4. URL-encodes the payload and creates a draw.io URL
+5. Returns the URL for you to click
 
 ### Example
 
 **You:** Create a flowchart for a user login process
 
-**Claude:** *Creates an HTML artifact with an "Open in draw.io" button*
+**Claude:** *Executes Python code and returns a clickable draw.io URL*
+
+### Technical Note
+
+The Project Instructions use zlib compression with `wbits=-12` (4KB window) as a workaround for Claude's Python sandbox memory limits. This enables large diagrams (1000+ elements) to be encoded in URLs.
 
 ---
 
@@ -339,5 +341,7 @@ Claude creates an **HTML artifact** that:
 
 - [draw.io](https://www.draw.io) - Free online diagram editor
 - [draw.io Desktop](https://github.com/jgraph/drawio-desktop) - Desktop application
+- [@drawio/mcp on npm](https://www.npmjs.com/package/@drawio/mcp) - This package on npm
+- [drawio-mcp on GitHub](https://github.com/jgraph/drawio-mcp) - Source code repository
 - [Mermaid.js Documentation](https://mermaid.js.org/intro/)
 - [MCP Specification](https://modelcontextprotocol.io/)
