@@ -10,26 +10,7 @@ The official [draw.io](https://www.draw.io) MCP (Model Context Protocol) server 
 - **URL support**: Fetch content from URLs automatically
 - **Customizable display**: Lightbox mode, dark mode, and more
 
-## Two Ways to Use
-
-### Option 1: MCP Server (Claude Desktop)
-
-Install and configure the MCP server for Claude Desktop. The server runs locally and can automatically open diagrams in your browser.
-
-### Option 2: Project Instructions
-
-Use draw.io diagram generation with custom project instructions - works in both Claude.ai and Claude Desktop without installing the MCP server. See [Using Project Instructions](#using-project-instructions) below.
-
-| Feature | MCP Server | Project Instructions |
-|---------|------------|----------------------|
-| Platform | Claude Desktop | Claude.ai & Claude Desktop |
-| Installation | Required | None |
-| System access | Opens browser automatically | No system access |
-| Diagram size | Unlimited | Unlimited (with compression) |
-
----
-
-## MCP Server Installation
+## Installation
 
 ### Using npx (recommended)
 
@@ -286,6 +267,10 @@ Product Database,database,
 4. The URL is returned to the LLM, which can present it to the user
 5. Opening the URL loads draw.io with the diagram ready to view/edit
 
+## Alternative: Project Instructions (Experimental)
+
+For an alternative approach that works without installing the MCP server, see the [Project Instructions discussion](https://github.com/jgraph/drawio-mcp/discussions/1). This approach uses Claude's Python sandbox to generate draw.io URLs, but has limitations due to a zlib compression bug.
+
 ## Development
 
 ```bash
@@ -295,47 +280,6 @@ npm install
 # Run the server
 npm start
 ```
-
----
-
-## Using Project Instructions
-
-You can use draw.io diagram generation without installing the MCP server by using custom project instructions. This works in both Claude.ai (web) and Claude Desktop.
-
-**Advantages:**
-
-- **No installation** - Just paste instructions into a project
-- **Works everywhere** - Claude.ai and Claude Desktop
-- **No system access** - Claude generates a link without accessing your computer
-- **Transparent** - You can inspect the generated URL before clicking
-- **Unlimited size** - Uses compression for large diagrams (1000+ elements)
-
-### Setup
-
-1. Create a new Project in Claude.ai or Claude Desktop
-2. In Project Settings, paste the contents of [`claude-project-instructions.txt`](./claude-project-instructions.txt) into the custom instructions
-3. Start a conversation and ask Claude to create diagrams
-
-### How It Works
-
-Claude executes simple Python code that:
-1. Generates Mermaid/CSV/XML diagram code based on your request
-2. Compresses the data using zlib and encodes as base64
-3. Creates a JSON payload with `compressed: true`
-4. URL-encodes the payload and creates a draw.io URL
-5. Returns the URL for you to click
-
-### Example
-
-**You:** Create a flowchart for a user login process
-
-**Claude:** *Executes Python code and returns a clickable draw.io URL*
-
-### Technical Note
-
-The Project Instructions use zlib compression with `wbits=-12` (4KB window) as a workaround for Claude's Python sandbox memory limits. This enables large diagrams (1000+ elements) to be encoded in URLs.
-
----
 
 ## Related Resources
 

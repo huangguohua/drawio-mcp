@@ -4,31 +4,10 @@ This is the official draw.io MCP (Model Context Protocol) server that enables LL
 
 ## Overview
 
-This repository provides two ways to enable draw.io diagram generation in Claude:
-
-1. **MCP Server** (`src/index.js`) - For Claude Desktop, requires installation
-2. **Project Instructions** (`claude-project-instructions.txt`) - For Claude.ai and Claude Desktop, no installation required
-
-Both approaches support:
+This MCP server provides tools to create draw.io diagrams from:
 - **XML diagrams**: Native draw.io/mxGraph XML format
 - **CSV data**: Tabular data that draw.io converts to diagrams
 - **Mermaid.js**: Text-based diagram definitions
-
-## Project Instructions
-
-The `claude-project-instructions.txt` file contains instructions that can be pasted into a Claude Project's custom instructions. Claude generates draw.io URLs using Python.
-
-**How it works:**
-- Claude executes simple Python code to generate a draw.io URL
-- Uses zlib compression (`compressed: true`) for efficient URL encoding
-- Returns a clickable URL that opens draw.io with the diagram pre-loaded
-- User can edit the diagram directly in draw.io
-
-**Advantages over MCP:**
-- No installation required
-- Works in Claude.ai (web) and Claude Desktop
-- No system access needed
-- Supports large diagrams (1000+ elements) with compression
 
 ## MCP Server Tools
 
@@ -215,8 +194,6 @@ The server generates draw.io URLs using the `#create` hash parameter:
 | Blank diagram | Invalid Mermaid/XML syntax | Check syntax, ensure proper escaping |
 | Diagram doesn't match expected | Mermaid version differences | Simplify syntax, avoid edge cases |
 
-## Compression Guidelines
+## Alternative Approach
 
-**MCP Server:** Uses Node.js with pako - compression works reliably for all diagram types and sizes.
-
-**Project Instructions:** Uses Python zlib compression with `wbits=-12` (4KB window) as a workaround for Claude's Python sandbox memory limits. Tested successfully with inputs up to 125KB (1000+ elements).
+For an experimental approach using Claude's Python sandbox instead of the MCP server, see the [Project Instructions discussion](https://github.com/jgraph/drawio-mcp/discussions/1). Note: This approach has limitations due to a zlib compression bug in the sandbox.
