@@ -267,9 +267,53 @@ Product Database,database,
 4. The URL is returned to the LLM, which can present it to the user
 5. Opening the URL loads draw.io with the diagram ready to view/edit
 
-## Alternative: Project Instructions (Experimental)
+## Alternative: Project Instructions (No MCP Required)
 
-For an alternative approach that works without installing the MCP server, see the [Project Instructions discussion](https://github.com/jgraph/drawio-mcp/discussions/1). This approach uses Claude's Python sandbox to generate draw.io URLs, but has limitations due to a zlib compression bug.
+An alternative approach is available that works **without installing the MCP server**. Instead of using MCP tools, you add instructions to a Claude Project that teach Claude to generate draw.io URLs using Python code execution.
+
+### Advantages
+
+- **No installation required** - works immediately in Claude.ai
+- **No desktop app needed** - works entirely in the browser
+- **Easy to use** - just add instructions to your Claude Project
+- **Privacy-friendly** - the generated URL uses a hash fragment (`#create=...`), which stays in the browser and is never sent to any server
+
+### How to Install
+
+1. Open your Claude Project settings
+2. Add the contents of [`src/claude-project-instructions.txt`](src/claude-project-instructions.txt) to your project instructions
+3. Ask Claude to create diagrams - it will generate clickable draw.io URLs
+
+### How It Works
+
+The instructions teach Claude to:
+1. Generate diagram code (Mermaid, XML, or CSV)
+2. Execute Python code to compress and encode the diagram
+3. Output a clickable URL that opens draw.io with your diagram
+
+### Token Usage Note
+
+The current instructions tell Claude to output the URL as a clickable link for user convenience. This has two considerations:
+
+1. **Token count**: The URL can be long (especially for complex diagrams), which consumes output tokens
+2. **Character accuracy**: The URL contains base64-encoded data where even a single character change breaks the diagram. The instructions emphasize character-perfect accuracy, but if you experience issues with broken links, you can use the alternative ending below.
+
+### Alternative: Reference Script Output Only
+
+If you prefer not to have Claude re-type the URL (to save tokens or avoid potential character substitution issues), replace the last section of the instructions with:
+
+```
+## CRITICAL: URL Output Rules
+
+**NEVER re-type, repeat, or copy the generated URL in your response.**
+
+After the Python script executes, simply tell the user:
+> "Click the URL in the code output above to open your diagram."
+
+Why: The URL contains base64-encoded data that can be corrupted when reproduced. The ONLY safe URL is the one printed directly by Python in the execution output.
+```
+
+This approach requires users to click the URL in the code execution output rather than in Claude's response, but guarantees the URL is always correct.
 
 ## Development
 

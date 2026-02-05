@@ -194,6 +194,26 @@ The server generates draw.io URLs using the `#create` hash parameter:
 | Blank diagram | Invalid Mermaid/XML syntax | Check syntax, ensure proper escaping |
 | Diagram doesn't match expected | Mermaid version differences | Simplify syntax, avoid edge cases |
 
-## Alternative Approach
+## Alternative: Project Instructions (No MCP Required)
 
-For an experimental approach using Claude's Python sandbox instead of the MCP server, see the [Project Instructions discussion](https://github.com/jgraph/drawio-mcp/discussions/1). Note: This approach has limitations due to a zlib compression bug in the sandbox.
+An alternative approach is available that works **without installing the MCP server**. Instead of using MCP tools, you add instructions to a Claude Project that teach Claude to generate draw.io URLs using Python code execution.
+
+### Advantages
+
+- **No installation required** - works immediately in Claude.ai
+- **No desktop app needed** - works entirely in the browser
+- **Easy to use** - just add instructions to your Claude Project
+- **Privacy-friendly** - the generated URL uses a hash fragment (`#create=...`), which stays in the browser and is never sent to any server
+
+### Installation
+
+Add the contents of [`src/claude-project-instructions.txt`](https://github.com/jgraph/drawio-mcp/blob/main/src/claude-project-instructions.txt) to your Claude Project instructions.
+
+### Token Usage and URL Accuracy
+
+The instructions tell Claude to output the URL as a clickable link. Note:
+
+1. **Token count**: Long URLs consume output tokens
+2. **Character accuracy**: The URL contains base64-encoded data where even a single character change breaks the diagram
+
+If you experience broken links, you can modify the instructions to have Claude direct users to the URL in the script output instead of re-typing it. See the README for the alternative instruction text.
