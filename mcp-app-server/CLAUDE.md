@@ -34,6 +34,21 @@ The draw.io viewer (`viewer-static.min.js`) is loaded from CDN at runtime.
 |---|---|---|
 | **Transport** | `StreamableHTTPServerTransport` (Express) | `WebStandardStreamableHTTPServerTransport` |
 | **HTML build** | Reads bundles from `node_modules` at startup | Pre-built via `build-html.js` → `generated-html.js` |
+| **Session management** | In-memory Map (process-scoped) | Single Durable Object (cost-optimized) |
+
+### Cloudflare Workers Architecture
+
+The Worker uses a **single Durable Object** (`MCPSessionManager`) to manage all MCP sessions:
+
+- All `/mcp` requests route to one global Durable Object instance (`idFromName("global")`)
+- The DO maintains a `Map` of session IDs to server/transport instances
+- Sessions are kept alive for 30 minutes of inactivity, then automatically cleaned up
+- This approach minimizes Durable Object costs while maintaining proper session state
+
+**Why a single DO?**
+- Durable Objects charge per request + per GB-seconds of active memory
+- One DO handling all sessions is more cost-effective than one DO per session
+- Session cleanup prevents unbounded memory growth
 
 ## MCP Apps SDK Patterns
 

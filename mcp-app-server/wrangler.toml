@@ -5,3 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [build]
 command = "node src/build-html.js"
+
+[[durable_objects.bindings]]
+name = "MCP_SESSION_MANAGER"
+class_name = "MCPSessionManager"
