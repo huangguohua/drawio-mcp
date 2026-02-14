@@ -201,6 +201,8 @@ async function renderDiagram(xml)
   drawioEditUrl = generateDrawioEditUrl(xml);
   currentXml = xml;
 
+  var bg = getComputedStyle(document.body).backgroundColor;
+  GraphViewer.darkBackgroundColor = bg;
   GraphViewer.processElements();
 
   // GraphViewer renders asynchronously; nudge the SDK's ResizeObserver
