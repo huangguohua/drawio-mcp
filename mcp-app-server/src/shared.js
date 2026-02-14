@@ -155,7 +155,8 @@ async function renderDiagram(xml) {
   catch(e) { showError("Failed to load the draw.io viewer. Check your network connection."); return; }
 
   containerEl.innerHTML = "";
-  const config = { highlight: "#0000ff", nav: true, resize: true, toolbar: "zoom layers", xml: xml };
+  const config = { highlight: "#0000ff", "dark-mode": "auto", nav: true,
+    resize: true, toolbar: "zoom layers tags", xml: xml };
   const graphDiv = document.createElement("div");
   graphDiv.className = "mxgraph";
   graphDiv.setAttribute("data-mxgraph", JSON.stringify(config));
