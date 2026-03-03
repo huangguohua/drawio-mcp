@@ -4,7 +4,7 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import pako from "pako";
-import { exec } from "child_process";
+import { spawn } from "child_process";
 
 const DRAWIO_BASE_URL = "https://app.diagrams.net/";
 
@@ -13,29 +13,27 @@ const DRAWIO_BASE_URL = "https://app.diagrams.net/";
  */
 function openBrowser(url)
 {
-  const platform = process.platform;
-  let command;
+  let child;
 
-  if (platform === "win32")
+  if (process.platform === "win32")
   {
-    command = `start "" "${url}"`;
+    child = spawn("cmd", ["/c", "start", "", url], { shell: false, stdio: "ignore" });
   }
-  else if (platform === "darwin")
+  else if (process.platform === "darwin")
   {
-    command = `open "${url}"`;
+    child = spawn("open", [url], { shell: false, stdio: "ignore" });
   }
   else
   {
-    command = `xdg-open "${url}"`;
+    child = spawn("xdg-open", [url], { shell: false, stdio: "ignore" });
   }
 
-  exec(command, (error) =>
+  child.on("error", function(error)
   {
-    if (error)
-    {
-      console.error(`Failed to open browser: ${error.message}`);
-    }
+    console.error(`Failed to open browser: ${error.message}`);
   });
+
+  child.unref();
 }
 
 /**
