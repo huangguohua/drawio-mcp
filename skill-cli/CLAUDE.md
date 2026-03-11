@@ -6,7 +6,7 @@ Claude Code skill that generates native `.drawio` files, with optional export to
 
 | File | Purpose |
 |------|---------|
-| `SKILL.md` | Claude Code skill file (users copy this to their skills directory) |
+| `drawio/SKILL.md` | Claude Code skill file (users copy this to their skills directory) |
 | `README.md` | Installation and usage documentation |
 
 ## How It Works

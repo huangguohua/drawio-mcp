@@ -18,20 +18,20 @@ When you ask Claude Code to create a diagram, it will:
 
 ## Installation
 
-Copy `SKILL.md` to your Claude Code skills directory:
+Copy `drawio/SKILL.md` to your Claude Code skills directory:
 
 **Global (all projects):**
 
 ```bash
 mkdir -p ~/.claude/skills/drawio
-cp SKILL.md ~/.claude/skills/drawio/SKILL.md
+cp drawio/SKILL.md ~/.claude/skills/drawio/SKILL.md
 ```
 
 **Per-project:**
 
 ```bash
 mkdir -p .claude/skills/drawio
-cp SKILL.md .claude/skills/drawio/SKILL.md
+cp drawio/SKILL.md .claude/skills/drawio/SKILL.md
 ```
 
 ## Usage
